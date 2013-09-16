@@ -14,6 +14,9 @@ instead of
 
 TCCR0A |= (1 << COM0A1)|(1 << COM0A0)  // COM0A1 - COM0A0 (Set OC0A on Compare Match, clear OC0A at TOP)
 
-added bit bang sound using the assembler command "nop":
+added bit bang sound using the very short delay - assembler command "nop":
+
+__asm__("nop\n\t"); 
+
 http://playground.arduino.cc/Main/AVR
 
