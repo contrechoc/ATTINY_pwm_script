@@ -23,17 +23,23 @@ int i2 = 0;
  
 void loopServo(){
  
-	
+
 	sound(1,0); 
 PORTB |=(1<<PB4);
- 	for (i = 255 ; i > 0 ; i-=4 ) // For loop (down counter 255 - 0 )
+int j = 0;
+
+
+ 	for (j = 253 ; j > 0 ; j-=4 ) // For loop (down counter 255 - 0 )
  	{
  	OCR0A = i; // Update Output Compare Register (PWM 0 - 255)
- 	_delay_ms(2);
+ 	_delay_ms(6);
 	if ( i == 25 ) PORTB |=(1<<PB4);
  	}
  sound(1,150); 
-	OCR0A = 250;
+for (i = 0 ; i < 10; i++ ) 
+_delay_ms(3);
+
+	OCR0A = 253;
 	PORTB &=~(1<<PB4);
 	_delay_ms(5);
 	PORTB |=(1<<PB4);
@@ -41,6 +47,22 @@ PORTB |=(1<<PB4);
 	PORTB &=~(1<<PB4);
  	_delay_ms(10);
 sound(-1,-1250); 
+
+for (i = 0 ; i < 5; i++ ) 
+_delay_ms(30);
+
+ 	for (j = 253 ; j > 0 ; j-=4 ) // For loop (down counter 255 - 0 )
+ 	{
+ 	OCR0A = i; // Update Output Compare Register (PWM 0 - 255)
+ 	_delay_ms(6);
+	if ( i == 25 ) PORTB |=(1<<PB4);
+ 	}
+ sound(1,150); 
+for (i = 0 ; i < 5; i++ ) 
+_delay_ms(30);
+
+	
+
 }
 
  int main (void)
@@ -54,7 +76,7 @@ PORTB &=~(1<<PB4);
  TCCR0A |= (1 << COM0A1)  // COM0A1 - COM0A0 (Set OC0A on Compare Match, clear OC0A at TOP)
  | (1 << WGM00) | (1 << WGM02); // WGM01 - WGM00 (set fast PWM)
  OCR0A = 100; // initialize Output Compare Register A to 0
- TCCR0B |= (1 << CS01)  ; // Start timer at Fcpu / 256
+// TCCR0B |= (1 << CS01)  ; // Start timer at Fcpu / 256
  
 //init ADC
  ADCSRA |= (1 << ADEN)| // Analog-Digital enable bit
@@ -77,9 +99,18 @@ sound(1,0);
  	ADCSRA |= (1 << ADSC); // start single conversion
  	while (ADCSRA & (1 << ADSC)) // wait until conversion is done
  	ADCSRA &= ~(1<<ADEN); // shut down the ADC
-	
-	if ( ABSDIFF(ADCH,oldVal) > 5 ){
-		loopServo();
+	 
+	if ( ABSDIFF(ADCH,oldVal) > 1 ){
+		
+for (i = 0 ; i < 50; i++ ) 
+_delay_ms(30);
+TCCR0B |= (1 << CS01)  ;
+loopServo();
+  TCCR0B  &=~(1<<CS01); 
+for (i = 0 ; i < 50; i++ ) 
+_delay_ms(30);
+ 
+
 		PORTB |=(1<<PB4);
 		//int j = 0;
 		//for (i = 5 ; i > 0 ; i-- ) 
@@ -101,8 +132,9 @@ sound(1,0);
 
 		oldVal = ADCH;
 	}
-	_delay_ms(10);
+ 
 
+	//_delay_ms(1);
 
  
  }
